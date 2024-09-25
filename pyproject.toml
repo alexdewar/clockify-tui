@@ -6,6 +6,9 @@ authors = [
     "Alex Dewar <a.dewar@imperial.ac.uk>"
 ]
 
+[tool.poetry.scripts]
+clockify-tui = "clockify_tui:main"
+
 [tool.poetry.dependencies]
 python = "^3.12"
 
