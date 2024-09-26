@@ -1,6 +1,7 @@
 """The main module for the UI."""
 
 import signal
+import sys
 
 from blessed import Terminal
 
@@ -16,7 +17,13 @@ class UI:
         """Run the UI forever."""
         with self._term.fullscreen(), self._term.cbreak():
             self._render()
-            signal.signal(signal.SIGWINCH, lambda sig, action: self._render())
+
+            # Re-render on terminal resize (this doesn't work on Windows)
+            if sys.platform != "win32":
+                signal.signal(
+                    signal.SIGWINCH,  # type: ignore[attr-defined]
+                    lambda sig, action: self._render(),
+                )
 
             self._term.inkey()
 
