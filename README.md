@@ -1,6 +1,33 @@
 # Clockify TUI
 
-Clockify TUI is an unofficial terminal interface for the Clockify time tracking app.
+Clockify TUI is an unofficial terminal interface for the [Clockify] time tracking app, written in Python.
+
+While there are [official apps] for a range of platforms, I wanted to make something a bit simpler that can be operated from the terminal. Thankfully, there is a [well-documented public API] we can use. The current plan is to use [`blessed`] for the UI and [`clockify-api-client`] for interactive with the Clockify API.
+
+It is currently under development, but the initial goals of the project are to:
+
+1. Provide a simple terminal UI displaying the current running task and previous tasks
+1. Allow for stopping the current task and starting a new one via the keyboard
+
+This will require some additional machinery:
+
+1. A way to select the current workspace[^1]
+1. A way to obtain a list of projects (required so that the user can start a new task)
+1. Some way to store configuration data, such as the API key (a user-configurable TOML file?)
+
+I also have some less pressing, nice-to-have features in mind:
+
+1. Allow for opening the web interface from the UI
+1. Provide a wizard for generating and editing the user config file
+1. Make the appearance of the app configurable via the config file
+
+[Clockify]: https://clockify.me/
+[official apps]: https://clockify.me/apps
+[well-documented public API]: https://docs.clockify.me/
+[`blessed`]: https://pypi.org/project/blessed/
+[`clockify-api-client`]: https://pypi.org/project/clockify-api-client/
+
+[^1]: Even if you only ever use one workspace, you still need to tell the Clockify API which workspace that is.
 
 ## For developers
 
