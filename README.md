@@ -1,12 +1,6 @@
 # Clockify TUI
 
-An unofficial terminal interface for the Clockify productivity app.
-
-This is a Python application that uses [poetry](https://python-poetry.org) for packaging
-and dependency management. It also provides [pre-commit](https://pre-commit.com/) hooks
-(for [ruff](https://pypi.org/project/ruff/) and
-[mypy](https://mypy.readthedocs.io/en/stable/)) and automated tests using
-[pytest](https://pytest.org/) and [GitHub Actions](https://github.com/features/actions).
+Clockify TUI is an unofficial terminal interface for the Clockify time tracking app.
 
 ## For developers
 
@@ -43,8 +37,3 @@ To get started:
    ```bash
    python -m clockify_tui
    ```
-
-## Publishing
-
-The GitHub workflow includes an action to publish on release.
-To run this action, uncomment the commented portion of `publish.yml`, and modify the steps for the desired behaviour (publishing a Docker image, publishing to PyPI, deploying documentation etc.)
