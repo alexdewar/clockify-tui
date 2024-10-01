@@ -1,0 +1,3 @@
+[clockify]
+# Paste your API key here. To generate it, visit: https://app.clockify.me/user/preferences#advanced
+api_key = ""

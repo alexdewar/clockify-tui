@@ -8,6 +8,7 @@ import click
 from .ui import UI
 
 __version__ = version(__name__)
+from .config import edit_config, try_read_config
 
 
 def main() -> None:
@@ -22,6 +23,17 @@ def main() -> None:
 @click.group()
 def cli() -> None:
     """The top-level group containing all the commands for Clockify TUI."""
+
+
+@cli.command()
+def read_config() -> None:
+    """A command to test reading in the config file."""
+    # Load the config file which includes the API key. Unused for now.
+    if try_read_config():
+        print("Loaded config successfully")
+
+
+cli.add_command(cli.command(edit_config))
 
 
 @cli.command()

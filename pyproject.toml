@@ -2,9 +2,8 @@
 name = "clockify_tui"
 version = "0.1.0"
 description = "An unofficial terminal interface for the Clockify productivity app."
-authors = [
-    "Alex Dewar <a.dewar@imperial.ac.uk>"
-]
+authors = ["Alex Dewar <a.dewar@imperial.ac.uk>"]
+include = [{path = "clockify_tui/data", format = ["sdist", "wheel"]}]
 
 [tool.poetry.scripts]
 clockify-tui = "clockify_tui:main"
@@ -13,6 +12,8 @@ clockify-tui = "clockify_tui:main"
 python = "^3.12"
 blessed = "^1.20.0"
 click = "^8.1.7"
+platformdirs = "^4.3.6"
+pydantic = "^2.9.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
@@ -27,7 +28,6 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.mypy]
-disallow_any_explicit = true
 disallow_any_generics = true
 warn_unreachable = true
 warn_unused_ignores = false
