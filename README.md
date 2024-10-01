@@ -29,6 +29,15 @@ I also have some less pressing, nice-to-have features in mind:
 
 [^1]: Even if you only ever use one workspace, you still need to tell the Clockify API which workspace that is.
 
+## Getting started
+
+To get started, you will need a Clockify account. You can [sign up for free here].
+
+You will also need to generate an API key so that you can connect to the Clockify API. Once you have created an account and logged in, you can generate a new one in [the advanced tab of the preferences page].
+
+[sign up for free here]: https://app.clockify.me/en/signup
+[the advanced tab of the preferences page]: https://app.clockify.me/user/preferences#advanced
+
 ## For developers
 
 This is a Python application that uses [poetry](https://python-poetry.org) for packaging
