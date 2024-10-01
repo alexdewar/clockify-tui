@@ -43,24 +43,55 @@ def _get_config_template_path() -> Path:
     )
 
 
-def _get_or_create_config_file_path() -> Path:
-    """Get the path to the config file, creating it if it doesn't exist.
+def _get_config_file_path() -> Path:
+    """Get the path to the config file.
 
-    The data/config_template.toml file will be used as a template.
+    If the config directory doesn't exist, it will be created (though not the file
+    itself).
     """
-    path = user_config_path("clockify-tui", ensure_exists=True) / "config.toml"
-    if not path.exists():
-        template_path = _get_config_template_path()
-        copyfile(template_path, path)
-    return path
+    return user_config_path("clockify-tui", ensure_exists=True) / "config.toml"
 
 
-def read_config() -> Config:
-    """Read the program's configuration file from the default location.
+def _try_get_or_create_config_path() -> Path | None:
+    """Try to get the path to the config file.
 
-    If the file does not exist, a default one will be created.
+    If the path exists or the user opts to create it, the path will be returned. If not,
+    return None.
     """
-    with _get_or_create_config_file_path().open("rb") as file:
+    config_path = _get_config_file_path()
+    if config_path.exists():
+        return config_path
+
+    while True:
+        choice = input(
+            "Config file doesn't exist. Would you like to create it now? (y/n): "
+        )
+        match choice.lower():
+            case "y":
+                edit_config(config_path)
+                return config_path
+            case "n":
+                return None
+
+
+def _create_config_file_from_template(config_path: Path) -> None:
+    """Create a new config file by copying over the template file."""
+    template_path = _get_config_template_path()
+    copyfile(template_path, config_path)
+
+
+def try_read_config() -> Config | None:
+    """Try to read the program's configuration file from the default location.
+
+    If the file does not exist, the user will be prompted to create it.
+
+    Returns the Config object or None if the user cancels.
+    """
+    config_path = _try_get_or_create_config_path()
+    if not config_path:
+        return None
+
+    with config_path.open("rb") as file:
         config = tomllib.load(file)
 
     return Config.model_validate(config)
@@ -88,11 +119,15 @@ def _try_get_editor_from_env() -> Sequence[str] | None:
         return None
 
 
-def edit_config() -> None:
+def edit_config(config_path: Path | None = None) -> None:
     """Edit the configuration file."""
-    # Ensure that config file exists
-    config_path = _get_or_create_config_file_path()
+    if not config_path:
+        config_path = _get_config_file_path()
+
     print(f"Config file is at {config_path}")
+
+    if not config_path.exists():
+        _create_config_file_from_template(config_path)
 
     # Figure out what command to use to edit the file
     editor_command = _try_get_editor_from_env() or _get_platform_open_command()

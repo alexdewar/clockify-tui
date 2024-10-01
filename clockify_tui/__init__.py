@@ -8,8 +8,7 @@ import click
 from .ui import UI
 
 __version__ = version(__name__)
-from .config import edit_config
-from .config import read_config as read_config_file
+from .config import edit_config, try_read_config
 
 
 def main() -> None:
@@ -30,8 +29,8 @@ def cli() -> None:
 def read_config() -> None:
     """A command to test reading in the config file."""
     # Load the config file which includes the API key. Unused for now.
-    read_config_file()
-    print("Loaded config successfully")
+    if try_read_config():
+        print("Loaded config successfully")
 
 
 cli.add_command(cli.command(edit_config))
