@@ -12,6 +12,7 @@ clockify-tui = "clockify_tui:main"
 python = "^3.12"
 blessed = "^1.20.0"
 click = "^8.1.7"
+platformdirs = "^4.3.6"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
