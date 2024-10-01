@@ -15,7 +15,7 @@ class UI:
 
     def run(self) -> None:
         """Run the UI forever."""
-        with self._term.fullscreen(), self._term.cbreak():
+        with self._term.fullscreen(), self._term.cbreak(), self._term.hidden_cursor():
             self._render()
 
             # Re-render on terminal resize (this doesn't work on Windows)
