@@ -11,15 +11,15 @@ It is currently under development, but the initial goals of the project are to:
 
 This will require some additional machinery:
 
-1. A way to select the current workspace[^1]
+1. A way to select the current workspace ([#4](https://github.com/alexdewar/clockify-tui/issues/4))[^1]
 1. A way to obtain a list of projects (required so that the user can start a new task)
-1. Some way to store configuration data, such as the API key (a user-configurable TOML file?)
+1. Some way to store configuration data, such as the API key (a user-configurable TOML file?) ([#3](https://github.com/alexdewar/clockify-tui/issues/3))
 
 I also have some less pressing, nice-to-have features in mind:
 
-1. Allow for opening the web interface from the UI
-1. Provide a wizard for generating and editing the user config file
-1. Make the appearance of the app configurable via the config file
+1. Allow for opening the web interface from the UI ([#8](https://github.com/alexdewar/clockify-tui/issues/8))
+1. Provide a wizard for generating and editing the user config file ([#10](https://github.com/alexdewar/clockify-tui/issues/10))
+1. Make the appearance of the app configurable via the config file ([#12](https://github.com/alexdewar/clockify-tui/issues/12))
 
 [Clockify]: https://clockify.me/
 [official apps]: https://clockify.me/apps
