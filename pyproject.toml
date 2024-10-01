@@ -2,9 +2,8 @@
 name = "clockify_tui"
 version = "0.1.0"
 description = "An unofficial terminal interface for the Clockify productivity app."
-authors = [
-    "Alex Dewar <a.dewar@imperial.ac.uk>"
-]
+authors = ["Alex Dewar <a.dewar@imperial.ac.uk>"]
+include = [{path = "clockify_tui/data", format = ["sdist", "wheel"]}]
 
 [tool.poetry.scripts]
 clockify-tui = "clockify_tui:main"
