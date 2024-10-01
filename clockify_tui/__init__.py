@@ -9,6 +9,7 @@ from .ui import UI
 
 __version__ = version(__name__)
 from .config import edit_config, try_read_config
+from .workspaces import list_workspaces, workspace_info
 
 
 def main() -> None:
@@ -34,6 +35,8 @@ def read_config() -> None:
 
 
 cli.add_command(cli.command(edit_config))
+cli.add_command(cli.command(list_workspaces))
+cli.add_command(cli.command(workspace_info))
 
 
 @cli.command()

@@ -17,6 +17,7 @@ class Clockify(BaseModel):
     """The clockify section of the configuration file."""
 
     api_key: str
+    workspace_id: str
 
     @field_validator("api_key")
     @classmethod
