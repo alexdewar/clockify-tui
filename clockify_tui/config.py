@@ -1,6 +1,10 @@
 """Code for loading and parsing the config file."""
 
+import os
+import platform
+import subprocess as sp
 import tomllib
+from collections.abc import Sequence
 from importlib import resources
 from pathlib import Path
 from shutil import copyfile
@@ -60,3 +64,38 @@ def read_config() -> Config:
         config = tomllib.load(file)
 
     return Config.model_validate(config)
+
+
+def _get_platform_open_command() -> Sequence[str]:
+    """Get the command used to open a file with the default app on this platform."""
+    match platform.system():
+        case "Windows":
+            return ("cmd", "/C", "start")
+        case "Darwin":
+            return ("open",)
+        case _:
+            return ("xdg-open",)
+
+
+def _try_get_editor_from_env() -> Sequence[str] | None:
+    """Try to get the preferred editor from the EDITOR environment variable.
+
+    If this variable is not set, return None.
+    """
+    try:
+        return os.environ["EDITOR"].split(" ")
+    except KeyError:
+        return None
+
+
+def edit_config() -> None:
+    """Edit the configuration file."""
+    # Ensure that config file exists
+    config_path = _get_or_create_config_file_path()
+    print(f"Config file is at {config_path}")
+
+    # Figure out what command to use to edit the file
+    editor_command = _try_get_editor_from_env() or _get_platform_open_command()
+
+    # Run the editor
+    sp.run((*editor_command, config_path), check=True)
