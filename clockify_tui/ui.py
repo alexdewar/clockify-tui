@@ -5,6 +5,8 @@ import sys
 
 from blessed import Terminal
 
+from .connect import client
+
 
 class UI:
     """Represents the terminal user interface."""
@@ -31,6 +33,11 @@ class UI:
         print(self._term.home + self._term.clear, end="")
 
         self._print_title()
+
+        workspaces = client.workspaces.get_workspaces()  # Returns list of workspaces.
+        print("Workspaces:")
+        for workspace in workspaces:
+            print(f"  {workspace['name']}")
 
         print("Press any key to exit")
 
