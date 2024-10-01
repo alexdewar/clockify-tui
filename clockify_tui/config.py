@@ -17,6 +17,7 @@ class Clockify(BaseModel):
     """The clockify section of the configuration file."""
 
     api_key: str
+    workspace_id: str
 
     @field_validator("api_key")
     @classmethod
@@ -24,6 +25,14 @@ class Clockify(BaseModel):
         """Ensure that the user has not provided an empty API key."""
         if not v:
             raise ValueError("API key cannot be empty")
+        return v
+
+    @field_validator("workspace_id")
+    @classmethod
+    def workspace_id_must_not_be_empty(cls, v: str) -> str:
+        """Ensure that the user has not provided an empty workspace ID."""
+        if not v:
+            raise ValueError("Workspace ID cannot be empty")
         return v
 
 

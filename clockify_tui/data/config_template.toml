@@ -1,3 +1,6 @@
 [clockify]
 # Paste your API key here. To generate it, visit: https://app.clockify.me/user/preferences#advanced
 api_key = ""
+
+# The ID of the workspace you want to use.
+workspace_id = ""
