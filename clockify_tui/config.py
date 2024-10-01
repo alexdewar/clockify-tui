@@ -6,13 +6,21 @@ from pathlib import Path
 from shutil import copyfile
 
 from platformdirs import user_config_path
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 
 
 class Clockify(BaseModel):
     """The clockify section of the configuration file."""
 
     api_key: str
+
+    @field_validator("api_key")
+    @classmethod
+    def api_key_must_not_be_empty(cls, v: str) -> str:
+        """Ensure that the user has not provided an empty API key."""
+        if not v:
+            raise ValueError("API key cannot be empty")
+        return v
 
 
 class Config(BaseModel):
