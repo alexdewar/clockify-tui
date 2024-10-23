@@ -23,7 +23,10 @@ def main() -> None:
 
 @click.group()
 def cli() -> None:
-    """The top-level group containing all the commands for Clockify TUI."""
+    """The top-level group containing all the commands for Clockify TUI.
+
+    If no command is supplied, the TUI will be run.
+    """
 
 
 @cli.command()
