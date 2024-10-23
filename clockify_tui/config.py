@@ -18,6 +18,7 @@ class Clockify(BaseModel):
 
     api_key: str
     workspace_id: str
+    project_id: str
 
     @field_validator("api_key")
     @classmethod
