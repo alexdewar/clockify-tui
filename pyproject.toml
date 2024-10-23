@@ -33,6 +33,7 @@ disallow_any_generics = true
 warn_unreachable = true
 warn_unused_ignores = false
 disallow_untyped_defs = true
+ignore_missing_imports = true
 exclude = [".venv/", "docs/"]
 
 [[tool.mypy.overrides]]
