@@ -1,7 +1,7 @@
 """Module for handling workspaces."""
 
+from .clockify import client
 from .config import try_read_config
-from .connect import client
 
 workspaces = client.workspaces.get_workspaces()
 
