@@ -47,3 +47,16 @@ def workspace_info() -> None:
     if workspace := get_selected_workspace(config):
         for key, value in workspace.items():
             print(f"{key}: {value}")
+
+
+def list_projects() -> None:
+    """Get list of projects."""
+    config = try_read_config()
+
+    if not config:
+        return None
+
+    client = get_client(config.clockify.api_key)
+    projects = client.projects.get_projects(config.clockify.workspace_id)
+    for project in projects:
+        print(f"{project['name']}: {project['id']}")
