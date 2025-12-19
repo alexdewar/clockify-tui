@@ -2,6 +2,7 @@
 
 from clockify_api_client.client import ClockifyAPIClient
 from clockify_api_client.models.workspace import Workspace
+from clockify_api_client.models.time_entry import TimeEntry
 
 API_URL = "api.clockify.me/v1"
 
@@ -30,3 +31,23 @@ def get_selected_workspace_or_default(
     except StopIteration:
         print("Workspace not found.")
         return None
+
+
+def get_user_id(client: ClockifyAPIClient) -> str:
+    """Get the ID of the current user."""
+    return client.users.get_current_user()["id"]
+
+
+def get_most_recent_time_entry(
+    client: ClockifyAPIClient, workspace_id: str, user_id: str
+) -> TimeEntry | None:
+    time_entries = client.time_entries.get_time_entries(workspace_id, user_id)
+    if not time_entries:
+        return None
+
+    return time_entries[0]
+
+
+class ClockifyClient:
+    def __init__(self) -> None:
+        pass
