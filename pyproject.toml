@@ -17,7 +17,7 @@ clockify-tui = "clockify_tui:main"
 
 [dependency-groups]
 dev = [
-    "pytest>=8.3.3,<9",
+    "pytest>=8.3.3,<10",
     "pytest-cov>=5.0.0,<8",
     "pytest-mypy>=0.10.3,<1.1",
     "pytest-mock>=3.14.0,<4",
