@@ -3,7 +3,7 @@ name = "clockify_tui"
 version = "0.1.0"
 description = "An unofficial terminal interface for the Clockify productivity app."
 authors = [{ name = "Alex Dewar", email = "a.dewar@imperial.ac.uk" }]
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 dependencies = [
     "blessed>=1.20.0,<2",
     "click>=8.1.7,<9",
@@ -51,7 +51,7 @@ disallow_untyped_defs = false
 addopts = "-v --mypy -p no:warnings --cov=clockify_tui --cov-report=html --doctest-modules --ignore=clockify_tui/__main__.py"
 
 [tool.ruff]
-target-version = "py312"
+target-version = "py313"
 
 [tool.ruff.lint]
 select = [
