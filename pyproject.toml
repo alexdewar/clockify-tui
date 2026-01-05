@@ -3,7 +3,7 @@ name = "clockify_tui"
 version = "0.1.0"
 description = "An unofficial terminal interface for the Clockify productivity app."
 authors = [{ name = "Alex Dewar", email = "a.dewar@imperial.ac.uk" }]
-requires-python = ">=3.12,<4"
+requires-python = ">=3.12"
 dependencies = [
     "blessed>=1.20.0,<2",
     "click>=8.1.7,<9",
