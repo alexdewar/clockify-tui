@@ -21,16 +21,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Poetry
-        run: pipx install poetry==1.8
-
-      - uses: actions/setup-python@v5
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v6
         with:
-          python-version: ${{matrix.python-version}}
-          cache: poetry
+          enable-cache: true
+          activate-environment: true
+          python-version: ${{ inputs.python-version }}
 
-      - name: Install dependencies
-        run: poetry install
+      - name: Install project
+        run: uv sync --all-groups
 
       - name: Run tests
-        run: poetry run pytest
+        run: uv run pytest
