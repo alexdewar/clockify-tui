@@ -6,12 +6,15 @@ from collections.abc import Callable
 
 from blessed import Terminal
 
+from clockify_tui.clockify import ClockifyClient
+
 
 class UI:
     """Represents the terminal user interface."""
 
-    def __init__(self) -> None:
+    def __init__(self, client: ClockifyClient) -> None:
         """Create a new UI."""
+        self._client = client
         self._term = Terminal()
         self._keypress_handlers: dict[str, Callable[[], None]] = {}
         self._should_quit = False
@@ -86,3 +89,8 @@ class UI:
         for key, action in self._keypress_handlers.items():
             print(f"{key}: {action.__doc__}")
         print(self._term.normal)
+
+    def _print_last_entry(self) -> None:
+        time_entry = self._client.get_most_recent_time_entry()
+        project = self._client.get_project_name(time_entry["projectId"])
+        print(project)

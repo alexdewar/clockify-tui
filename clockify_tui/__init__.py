@@ -5,6 +5,8 @@ from importlib.metadata import version
 
 import click
 
+from clockify_tui.clockify import ClockifyClient
+
 from .ui import UI
 
 __version__ = version(__name__)
@@ -43,5 +45,10 @@ cli.add_command(cli.command(list_projects))
 @cli.command()
 def tui() -> None:
     """Launch the TUI."""
-    ui = UI()
+    config = try_read_config()
+    if not config:
+        return
+    client = ClockifyClient(config)
+
+    ui = UI(client)
     ui.run()
