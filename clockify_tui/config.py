@@ -10,7 +10,7 @@ from pathlib import Path
 from shutil import copyfile
 
 from platformdirs import user_config_path
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class Clockify(BaseModel):
@@ -33,6 +33,7 @@ class Config(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
     clockify: Clockify
+    update_interval: int = Field(default=3)
 
 
 def _get_config_template_path() -> Path:

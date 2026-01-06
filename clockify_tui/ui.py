@@ -3,8 +3,11 @@
 import signal
 import sys
 from collections.abc import Callable
+from threading import Lock
 
 from blessed import Terminal
+from clockify_api_client.models.time_entry import TimeEntry
+from pubsub import pub
 
 from clockify_tui.clockify import ClockifyClient
 
@@ -18,9 +21,13 @@ class UI:
         self._term = Terminal()
         self._keypress_handlers: dict[str, Callable[[], None]] = {}
         self._should_quit = False
+        self._time_entry: TimeEntry | None = None
+        self._render_lock = Lock()
 
         # Set up keyboard shortcuts
         self.add_keypress_handler("q", self.quit)
+
+        pub.subscribe(self._update_time_entry, "clockify.time_entry_changed")
 
     def quit(self) -> None:
         """Quit the program."""
@@ -61,20 +68,26 @@ class UI:
                 if handler := self.get_keypress_handler(key):
                     handler()
 
+    def _update_time_entry(self, time_entry: TimeEntry | None) -> None:
+        """Update the currently displayed time entry."""
+        self._time_entry = time_entry
+        self._render()
+
     def _render(self) -> None:
         """The main render function."""
-        print(self._term.clear, end="")
+        with self._render_lock:
+            print(self._term.clear, end="")
 
-        # At bottom of screen
-        self._print_keyboard_shortcuts()
+            # At bottom of screen
+            self._print_keyboard_shortcuts()
 
-        # Reset position to top
-        print(self._term.home, end="")
+            # Reset position to top
+            print(self._term.home, end="")
 
-        # Print title at top
-        self._print_title()
+            # Print title at top
+            self._print_title()
 
-        self._print_last_entry()
+            self._print_last_entry()
 
     def _print_title(self) -> None:
         """Print the program's title."""
@@ -95,10 +108,9 @@ class UI:
         print(self._term.normal)
 
     def _print_last_entry(self) -> None:
-        time_entry = self._client.get_most_recent_time_entry()
-        if not time_entry:
+        if not self._time_entry:
             return
 
-        project = self._client.get_project_name(time_entry["projectId"])
-        status = "Stopped" if time_entry["timeInterval"]["end"] else "Running"
+        project = self._client.get_project_name(self._time_entry["projectId"])
+        status = "Stopped" if self._time_entry["timeInterval"]["end"] else "Running"
         print(f"{project} - {status}")

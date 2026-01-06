@@ -1,8 +1,12 @@
 """Connect to the Clockify API."""
 
+from threading import Thread
+from time import sleep
+
 from clockify_api_client.client import ClockifyAPIClient
 from clockify_api_client.models.time_entry import TimeEntry
 from clockify_api_client.models.workspace import Workspace
+from pubsub import pub
 
 from clockify_tui.config import Config
 
@@ -49,19 +53,32 @@ class ClockifyClient:
         )["id"]
         self._user_id = get_user_id(self._client)
         self._projects = self._get_projects()
+        self._update_thread = Thread(
+            target=lambda: self._update_time_entry(config.update_interval)
+        )
+        self._last_time_entry: TimeEntry | None = None
+        self._update_thread.start()
+
+    def _update_time_entry(self, update_interval: int) -> None:
+        while True:
+            time_entries = self._client.time_entries.get_time_entries(
+                self._workspace_id, self._user_id
+            )
+            cur_time_entry = time_entries[0] if time_entries else None
+            if cur_time_entry != self._last_time_entry:
+                self._last_time_entry = cur_time_entry
+                pub.sendMessage(
+                    "clockify.time_entry_changed", time_entry=cur_time_entry
+                )
+
+            sleep(update_interval)
 
     def get_most_recent_time_entry(self) -> TimeEntry | None:
         """Get the most recent time entry logged.
 
         May be running or stopped.
         """
-        time_entries = self._client.time_entries.get_time_entries(
-            self._workspace_id, self._user_id
-        )
-        if not time_entries:
-            return None
-
-        return time_entries[0]
+        return self._last_time_entry
 
     def get_project_name(self, project_id: str) -> str:
         """Get the name of the project corresponding to the given ID."""
