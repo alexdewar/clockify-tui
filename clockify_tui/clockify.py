@@ -39,7 +39,10 @@ def get_user_id(client: ClockifyAPIClient) -> str:
 
 
 class ClockifyClient:
+    """Manages interaction with Clockify API."""
+
     def __init__(self, config: Config) -> None:
+        """Create a new ClockifyClient."""
         self._client = get_client(config.clockify.api_key)
         self._workspace_id = get_selected_workspace_or_default(
             self._client, config.clockify.workspace_id
@@ -48,6 +51,10 @@ class ClockifyClient:
         self._projects = self._get_projects()
 
     def get_most_recent_time_entry(self) -> TimeEntry | None:
+        """Get the most recent time entry logged.
+
+        May be running or stopped.
+        """
         time_entries = self._client.time_entries.get_time_entries(
             self._workspace_id, self._user_id
         )
@@ -57,10 +64,23 @@ class ClockifyClient:
         return time_entries[0]
 
     def get_project_name(self, project_id: str) -> str:
+        """Get the name of the project corresponding to the given ID."""
         return self._projects[project_id]
 
     def _get_projects(self) -> dict[str, str]:
-        return {
-            project["id"]: project["name"]
-            for project in self._client.projects.get_projects(self._workspace_id)
-        }
+        """Get all projects for this client's workspace."""
+        out: dict[str, str] = {}
+        page = 1
+        while True:
+            # Load projects, one page at a time
+            new = {
+                project["id"]: project["name"]
+                for project in self._client.projects.get_projects(
+                    self._workspace_id, params={"page": page, "page-size": 1000}
+                )
+            }
+            if not new:
+                break
+            out |= new
+            page += 1
+        return out

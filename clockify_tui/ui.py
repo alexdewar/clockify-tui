@@ -74,10 +74,14 @@ class UI:
         # Print title at top
         self._print_title()
 
+        self._print_last_entry()
+
     def _print_title(self) -> None:
         """Print the program's title."""
         txt = "Clockify TUI"
-        print(f"{self._term.darkolivegreen}{self._term.center(txt)}{self._term.normal}")
+        print(
+            f"{self._term.darkolivegreen}{self._term.center(txt)}{self._term.normal}\n"
+        )
 
     def _print_keyboard_shortcuts(self) -> None:
         """Print a list of keyboard shortcuts at the bottom of the screen."""
@@ -92,5 +96,9 @@ class UI:
 
     def _print_last_entry(self) -> None:
         time_entry = self._client.get_most_recent_time_entry()
+        if not time_entry:
+            return
+
         project = self._client.get_project_name(time_entry["projectId"])
-        print(project)
+        status = "Stopped" if time_entry["timeInterval"]["end"] else "Running"
+        print(f"{project} - {status}")
